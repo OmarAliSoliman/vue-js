@@ -1,0 +1,70 @@
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
+<div id="app">
+  <!-- to parse html  -->
+  <div v-html="title"></div>
+
+  <!-- to add class, id, .. dynamic -->
+  <div v-bind:id="dynamicId">Dynamic Id</div>
+  <div v-bind:class="dynamicClass">Dynamic Class</div>
+
+  <!-- event sending -->
+  <!-- <input type="text" @change="changeInput($event)" > -->
+  <!-- without send event -->
+  <input type="text" @change="changeInput" >
+
+
+  <!-- modfiers like prevent -->
+  <form @submit.prevent="saveData">
+    <input type="text" name="">
+    <button type="submit">Go</button>
+  </form>
+
+
+  <ul> 
+    <li v-for="item in list">
+      {{item}}
+      <button @click="deleteItem(item)">-</button>
+    </li>
+  </ul>
+  <input type="text" @change="changeInput($event)" v-model="name">
+  <button @click="addItem()">add</button>
+</div>
+
+<script>
+  new Vue({
+    'el': '#app',
+    // add data
+    data: {
+      name: "omar",
+      newitem: "",
+      title: "<h1>omar Ali h1</h1/>",
+      list: ['omar', 'ali', 'soliman'],
+      dynamicId: "test-id",
+      dynamicClass: "test-class"
+    },
+
+    // add methods
+    // no use arrow function
+    methods: {
+      deleteItem:  function(item, event){
+        let itemindex = this.list.indexOf(item);
+        this.list.splice(itemindex, 1);
+      },
+      changeInput: function(event){
+        this.newitem = event.target.value;
+        console.log(this.newitem);
+      },
+      addItem: function(){
+        this.list.push(this.name);
+        this.name = '';
+        
+      },
+      saveData:function(e){
+        // e.preventDefault();
+        console.log("prevent")
+      }
+    }
+
+  })
+</script>
