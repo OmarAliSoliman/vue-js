@@ -1,5 +1,42 @@
 <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+  .liked {
+    color: red;
+  }
 
+  .red {
+    background-color: red;
+    width: 100px;
+    height: 100px;
+  }
+
+  .blue {
+    background-color: blue;
+    width: 100px;
+    height: 100px;
+  }
+
+  .green {
+    background-color: green;
+    width: 100px;
+    height: 100px;
+  }
+
+  .border {
+    border: 1px solid #000;
+  }
+
+  .radius {
+    border-radius: 10px;
+  }
+  .error{
+    border: 1px solid red;
+  }
+  .active{
+    color: #BF8570;
+  }
+</style>
 <div id="app">
   <!-- to parse html  -->
   <div v-html="title"></div>
@@ -8,10 +45,14 @@
   <div v-bind:id="dynamicId">Dynamic Id</div>
   <div v-bind:class="dynamicClass">Dynamic Class</div>
 
+  <!-- to add class, id, .. dynamic shorthand -->
+  <div :id="dynamicId">Dynamic Id Shorthand</div>
+  <div :class="dynamicClass">Dynamic Class Shorthand</div>
+
   <!-- event sending -->
   <!-- <input type="text" @change="changeInput($event)" > -->
   <!-- without send event -->
-  <input type="text" @change="changeInput" >
+  <input type="text" @change="changeInput">
 
 
   <!-- modfiers like prevent -->
@@ -21,14 +62,171 @@
   </form>
 
 
-  <ul> 
-    <li v-for="item in list">
-      {{item}}
-      <button @click="deleteItem(item)">-</button>
+  <!-- stop modfiers (stop propagation) -->
+  <div @mouseover="react1" style="background-color: aqua; width: 200px; height: 200px;">
+    <div @mouseover.stop="react2" style="background-color:wheat; width: 100px; height: 100px;"></div>
+  </div>
+
+  <!-- self modfiers (same stop propagation but for the parent to fire the action for just target ) -->
+  <div @mouseover.self="react1" style="background-color: green; width: 200px; height: 200px; margin-top: 100px;">
+    <div @mouseover="react2" style="background-color:red; width: 100px; height: 100px;"></div>
+  </div>
+
+  <!-- capture modfiers (make the parent fire first (opsitr the normal result)) -->
+  <div @mouseover.capture="react1" style="background-color: blue; width: 200px; height: 200px; margin-top: 100px;">
+    <div @mouseover="react2" style="background-color:beige; width: 100px; height: 100px;"></div>
+  </div>
+
+  <!-- once modfiers (make the action fire once) -->
+  <div @mouseover="react1" style="background-color: skyblue; width: 200px; height: 200px; margin-top: 100px;">
+    <div @mouseover.once="react2" style="background-color:brown; width: 100px; height: 100px;"></div>
+  </div>
+
+
+  <!-- key actions modfires -->
+  <input type="text" @keyup="handelKay">
+  <!-- enter modifiers -> ther are more than in the documention  -->
+  <input type="text" @keyup.enter="handelKay">
+  <input type="text" @keyup.ctrl.enter="handelKay">
+  <input type="text" @keyup.shift.enter="handelKay">
+  <input type="text" @click.shift.enter="handelKay">
+  <input type="text" @click.left="handelKay">
+
+
+  <h1>v-once</h1>
+
+  <!-- v-once (constant value) apply on all the children and the parent of element  -->
+  <div v-once>{{counteronce}}</div>
+  <div>{{counteronce}}</div>
+  <button @click="racecounter">click</button>
+
+  <h1>2 way data binding</h1>
+  <!-- data from template to instance -->
+  <input type="text" v-model="inputvalue" />
+  <p>{{inputvalue}}</p>
+  <button @click="inputvalue = 'inputvalue was changed'">change</button>
+
+
+  <!-- computed (get value from anouther values) advantge (reasablue, clean, not change insted one of there element changes) -->
+  <h1>Computed</h1>
+  <input type="text" v-model="first_name">
+  <input type="text" v-model="test">
+  <p>{{first_name + " " + last_name + " " + Date.now()}}</p>
+  <p>{{full_name}}</p>
+
+  <h1>watch</h1>
+  <!-- watch used as computed, method -> use to know if this data changes then call this function -->
+  <h1>Likes</h1>
+  <span :class="likedClass" @click="changeLike"> {{likes}} Likes </span>
+
+
+  <!-- binding class -->
+  <div :class="boxColor"></div>
+  <button @click="activebox = !activebox">toggle</button>
+
+  <!-- binding array class -->
+  <div :class="arrayclasses"></div>
+
+  <!-- style binding -->
+  <h1 :style="{'color':'red'}">Text</h1>
+  <h1 :style="[obj1, boxSize]">Text</h1>
+  <button @click="countsize++">+</button>
+  <button @click="countsize--">-</button>
+
+
+  <!-- v-text -->
+  <h3>v-text</h3>
+  <div> {{name}} </div>
+  <div v-text="name"></div>
+
+  <!-- v-if -->
+  <h3>if condition</h3>
+  {{!liked ? "omar":"ali"}}
+  <div class="red" v-if="!liked">omar</div>
+  <div class="red" v-else-if="!liked">notlike</div>
+  <div class="green" v-else>ali</div>
+
+
+  <!-- v-show (diffrent between it and between v-if * this make display none for element * instead that remove element from the dom) -->
+  <h3>v-show</h3>
+  <div class="red" v-show="!liked">show</div>
+
+  <h3>v-for</h3>
+  <div>
+    <span style="margin-right: 10px;" v-for="item in arrayclasses">{{item}}</span>
+  </div>
+
+
+  <!-- v-for (for object) -->
+  <h3>V-for (object)</h3>
+  <div>
+    <p v-for="(item, key ,index) in testobj">
+      #{{index + 1}}-> {{key}}: {{item}}
+    </p>
+  </div>
+
+
+  <h3>V-for (object and arry)</h3>
+  <div>
+    <ul>
+      <li v-for="(item, index) in  users">
+        <span>{{item.name}}</span>
+        <p v-for="(item2, key, index) in item">#{{index + 1}}-> {{key}}: {{item2}}</p>
+        <hr>
+      </li>
+    </ul>
+    <!-- <p v-for="(item, key ,index) in testobj">
+      #{{index + 1}}-> {{key}}: {{item}}
+    </p> -->
+  </div>
+
+  <h3>Vue.set</h3>
+  <div>
+    <p v-for="(item, key) in testobj">{{key}} : {{item}}</p>
+  </div>
+  <button @click="changeitem">Change</button>
+
+
+  <!-- use key like in react to add identity for every item -->
+  <h3>Use Key </h3>
+  <p v-for="(item, key ,index) in users" :key="item.age" class="user">
+    <input v-model="item.name" />
+  </p>
+  <button @click="ReverseItems()">Revers</button>
+  <button @click="AddClassError()">Add Class</button>
+
+  <h3> Use filter with v-for </h3>
+
+  <ul>
+    <input type="text">
+    <li v-for="num in morethan5" :key="num">{{num}}</li>
+  </ul>
+  <!-- <button @click="morethan5()">filter</button> -->
+
+
+  <!-- search -->
+  <h3>Search</h3>
+  <input type="text" v-model="searchitem">
+  <ul>
+    <li v-for="item in srarchFilter()">{{item}}</li>
+  </ul>
+
+
+  <!-- v-range -->
+  <h3>Range</h3>
+  <i class="fas fa-star active" v-for="item in rate"></i> <i class="fas fa-star" v-for="item in 5-rate"></i>
+
+  <hr>
+  <ul>
+    <li v-for="(item, index) in list">
+      <p v-if="item > 10">{{item}}</p>
+      <button @click="deleteItem(item, index)">-</button>
+      <button @click="editItem(item, index)">*</button>
     </li>
   </ul>
-  <input type="text" @change="changeInput($event)" v-model="name">
-  <button @click="addItem()">add</button>
+  <input type="text" @change="changeInput($event)" v-model="newitemname">
+  <button @click="addItem()" v-if="!edit">add</button>
+  <button @click="editItemButton()" v-if="edit">Edit</button>
 </div>
 
 <script>
@@ -36,33 +234,170 @@
     'el': '#app',
     // add data
     data: {
-      name: "omar",
+      name: "",
+      newitemname: "",
       newitem: "",
       title: "<h1>omar Ali h1</h1/>",
-      list: ['omar', 'ali', 'soliman'],
+      list: ['10', '20', '30'],
       dynamicId: "test-id",
-      dynamicClass: "test-class"
+      dynamicClass: "test-class",
+      counteronce: 1,
+      inputvalue: "data binding",
+      first_name: "Omar",
+      last_name: "Ali",
+      test: "test",
+      likes: 4,
+      liked: true,
+      activebox: true,
+      arrayclasses: ['red', 'border', 'radius'],
+      obj1: { 'color': 'green' },
+      countsize: 30,
+      size: 30,
+      result: "",
+      edit: false,
+      itemindex: 0,
+      testobj:
+      {
+        name: "omar",
+        age: "25",
+        phone: "0198586783"
+      },
+      users: [
+        {
+          name: "omar",
+          age: "25",
+          phone: "0198586783"
+        },
+        {
+          name: "ali",
+          age: "55",
+          phone: "0502856684"
+        },
+      ],
+      numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9,10],
+      listnames: ["ahmed", 'yasers', 'khaled', 'abdullah'],
+      searchitem: "",
+      rate: 3, 
+    },
+    computed: {
+      full_name: function () {
+        return this.first_name + " " + this.last_name + Date.now();
+      },
+      likedClass: function () {
+        return this.liked ? "liked" : " ";
+      },
+      boxColor: function () {
+        return this.activebox ? 'red' : 'green';
+      },
+      boxSize: function () {
+        return this.activebox ? { 'font-size': `${this.size}px` } : null
+      },
+      morethan5: function () {
+        // const newitems =  this.numbers.filter((item)=> item > 5)
+        // this.numbers = newitems
+
+        return this.numbers.filter((item)=> item > 5)
+      }
+    },
+
+    watch: {
+      liked: function (valu) {
+        if (valu) {
+          this.likes++
+        } else {
+          this.likes--
+        }
+      },
+
+      countsize: function (sz) {
+        if (sz <= 35) {
+          this.size++
+        } else {
+          this.size--
+        }
+      },
     },
 
     // add methods
     // no use arrow function
     methods: {
-      deleteItem:  function(item, event){
-        let itemindex = this.list.indexOf(item);
-        this.list.splice(itemindex, 1);
+      deleteItem: function (item, event, index) {
+        // let itemindex = this.list.indexOf(item);
+        this.list.splice(index, 1);
       },
-      changeInput: function(event){
+      editItem: function (item, event) {
+        console.log(item)
+        this.newitemname = item;
+        this.edit = true;
+        this.itemindex = this.list.indexOf(item);
+      },
+      editItemButton: function () {
+        // let newarr = [...this.list];
+        // newarr[this.itemindex] = this.newitemname;
+        // this.list = newarr;
+
+
+        // Vue.set(array, index, newitem)
+        Vue.set(this.list, this.itemindex, this.newitemname)
+        this.newitemname = "";
+      },
+      changeInput: function (event) {
         this.newitem = event.target.value;
         console.log(this.newitem);
       },
-      addItem: function(){
-        this.list.push(this.name);
-        this.name = '';
-        
+      addItem: function () {
+        this.list.push(this.newitemname);
+        this.newitemname = '';
+
       },
-      saveData:function(e){
+      saveData: function (e) {
         // e.preventDefault();
         console.log("prevent")
+      },
+
+      react1: function () {
+        console.log("react 1 hovered")
+      },
+
+      react2: function (event) {
+        // event.stopPropagation(); -> replace it with @mouseover.stop
+        console.log("react 2 hovered")
+      },
+
+      handelKay: function (e) {
+        console.log(e.target.value)
+      },
+      racecounter: function () {
+        this.counteronce++;
+      },
+      changeLike: function () {
+        this.liked = !this.liked;
+        // if(this.liked){
+        //   this.likes++
+        // }else{
+        //   this.likes--
+        // }
+      },
+      changeitem: function () {
+        this.testobj.name = "test";
+        this.testobj.age="35";
+        this.testobj.email="test@example.com";
+        Vue.set(this.testobj, "adress", "adress");
+      },
+      ReverseItems:function(){
+        this.users.reverse();
+      },
+      AddClassError:function(){
+        document.querySelector(".user").classList.add("error");
+      },
+      filtersArray: function(){
+        const newitems =  this.numbers.filter((item)=> item > 5)
+        this.numbers = newitems
+      },
+      srarchFilter: function(){
+        var searchlabel = this.searchitem;
+        return this.listnames.filter((item)=> item.indexOf(searchlabel) !== -1)
+        // this.listnames = newarr;
       }
     }
 
