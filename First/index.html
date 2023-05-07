@@ -1,5 +1,7 @@
 <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+  crossorigin="anonymous" referrerpolicy="no-referrer" />
 <style>
   .liked {
     color: red;
@@ -30,10 +32,12 @@
   .radius {
     border-radius: 10px;
   }
-  .error{
+
+  .error {
     border: 1px solid red;
   }
-  .active{
+
+  .active {
     color: #BF8570;
   }
 </style>
@@ -216,6 +220,12 @@
   <h3>Range</h3>
   <i class="fas fa-star active" v-for="item in rate"></i> <i class="fas fa-star" v-for="item in 5-rate"></i>
 
+
+  <!-- v-range -->
+  <h3>Range Click</h3>
+  <i @click="rateminus(item)" class="fas fa-star active" v-for="item in rate"></i> <i @click="rateplus(item)"
+    class="fas fa-star" v-for="item in 5-rate"></i>
+
   <hr>
   <ul>
     <li v-for="(item, index) in list">
@@ -250,20 +260,20 @@
       liked: true,
       activebox: true,
       arrayclasses: ['red', 'border', 'radius'],
-      obj1: { 'color': 'green' },
+      obj1: {
+        'color': 'green'
+      },
       countsize: 30,
       size: 30,
       result: "",
       edit: false,
       itemindex: 0,
-      testobj:
-      {
+      testobj: {
         name: "omar",
         age: "25",
         phone: "0198586783"
       },
-      users: [
-        {
+      users: [{
           name: "omar",
           age: "25",
           phone: "0198586783"
@@ -274,10 +284,10 @@
           phone: "0502856684"
         },
       ],
-      numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9,10],
+      numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       listnames: ["ahmed", 'yasers', 'khaled', 'abdullah'],
       searchitem: "",
-      rate: 3, 
+      rate: 3,
     },
     computed: {
       full_name: function () {
@@ -290,13 +300,15 @@
         return this.activebox ? 'red' : 'green';
       },
       boxSize: function () {
-        return this.activebox ? { 'font-size': `${this.size}px` } : null
+        return this.activebox ? {
+          'font-size': `${this.size}px`
+        } : null
       },
       morethan5: function () {
         // const newitems =  this.numbers.filter((item)=> item > 5)
         // this.numbers = newitems
 
-        return this.numbers.filter((item)=> item > 5)
+        return this.numbers.filter((item) => item > 5)
       }
     },
 
@@ -380,24 +392,32 @@
       },
       changeitem: function () {
         this.testobj.name = "test";
-        this.testobj.age="35";
-        this.testobj.email="test@example.com";
+        this.testobj.age = "35";
+        this.testobj.email = "test@example.com";
         Vue.set(this.testobj, "adress", "adress");
       },
-      ReverseItems:function(){
+      ReverseItems: function () {
         this.users.reverse();
       },
-      AddClassError:function(){
+      AddClassError: function () {
         document.querySelector(".user").classList.add("error");
       },
-      filtersArray: function(){
-        const newitems =  this.numbers.filter((item)=> item > 5)
+      filtersArray: function () {
+        const newitems = this.numbers.filter((item) => item > 5)
         this.numbers = newitems
       },
-      srarchFilter: function(){
+      srarchFilter: function () {
         var searchlabel = this.searchitem;
-        return this.listnames.filter((item)=> item.indexOf(searchlabel) !== -1)
+        return this.listnames.filter((item) => item.indexOf(searchlabel) !== -1)
         // this.listnames = newarr;
+      },
+      rateplus: function (item) {
+        console.log("plus",this.rate, ' ', item)
+        this.rate = item + this.rate;
+      },
+      rateminus: function (item) {
+        console.log("minus",this.rate, ' ', item)
+        this.rate = item
       }
     }
 
