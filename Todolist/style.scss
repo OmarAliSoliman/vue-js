@@ -1,0 +1,111 @@
+body, *{
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: 'Raleway', sans-serif;
+}
+
+html{
+  font-size: 16px;
+  font-family: 'Raleway', sans-serif;
+}
+
+.todo_app{
+  min-height: 100vh;
+  height: auto;
+  background-image:linear-gradient(to bottom, rgba(112.520718,44.062154,249.437846, 1), rgba(112.520718,44.062154,249.437846, 0.95));
+  .todo_container{
+    background-color: #fff;
+    border-radius: 5px;
+    width: 60%;
+    margin: auto;
+    .add_todo{
+      .form-control{
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        height: 60px;
+        border-right: 0;
+        border-left: 0;
+        &::placeholder{
+          text-transform: capitalize;
+        }
+        &:focus{
+          outline: 0;
+          box-shadow: none;
+        }
+      }
+    }
+    ul{
+      max-height: 400px;
+      overflow: auto;
+      li{
+        padding: 30px 15px;
+        border-bottom: 1px solid #eee;
+        &:last-child{
+          border-bottom: 0;
+        }
+        span{
+          font-size: 1.2rem;
+          text-transform: capitalize;
+        }
+        label{
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          // justify-content: center;
+          .cheack_circle{
+            border: 1px solid #eee;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-right: 10px;
+            .small_check_circle{
+              width: 18px;
+              height: 18px;
+              border-radius: 50%;
+              display: block;
+            }
+          }
+          input{
+            position: absolute;
+            z-index: -1;
+            visibility: hidden;
+            opacity: 0;
+          }
+          input[type="checkbox"]:checked ~ .cheack_circle{
+            border: 1px solid green;
+            .small_check_circle{
+              background-color: green;
+              border: 1px solid green;
+            }
+          }
+        }
+        &.completed{
+          span{
+            text-decoration: line-through;
+          }
+        }
+        .delet_todo{
+          font-size: 1.3rem;
+          cursor: pointer;
+          opacity: 0;
+          transition: all .3s ease-in-out;
+          i{
+            color: red;
+          }
+        }
+        &:hover{
+          .delet_todo{
+            opacity: .5;
+          }
+        }
+      }
+  
+    }
+  }
+
+}
