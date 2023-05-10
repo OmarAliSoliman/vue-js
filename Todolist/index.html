@@ -1,7 +1,8 @@
 <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap"
+  rel="stylesheet">
 <link rel="stylesheet" href="./style.css">
 
 
@@ -11,22 +12,51 @@
       <div class="wrapper h-100 d-flex align-items-center">
         <div class="todo_container">
           <div class="add_todo">
-            <input type="text" class="add_todo_input form-control" placeholder="what you are doing...." v-model="todoItem" @keyup.enter="addNewTodo()">
+            <input type="text" class="add_todo_input form-control" placeholder="what you are doing...."
+              v-model="todoItem" @keyup.enter="edit ? editTodo():addNewTodo()">
           </div>
           <ul class="list-unstyled mb-0">
-            <li v-for="(item, index) in todoitems" :class="item.complete ? 'completed' : ''" class="d-flex align-items-center justify-content-between">
-              <label :for="'checkbox'+index" @click="checkComplete(index)">
-                <input type="checkbox" :id="'checkbox'+index">
-                <div class="cheack_circle">
-                  <div class="small_check_circle"></div>
+            <li v-for="(item, index) in todoitems" :class="item.complete ? 'completed' : ''"
+              class="d-flex align-items-center justify-content-between">
+              <label :for="'checkbox'+index">
+                <div @click="checkComplete(item)">
+                  <input type="checkbox" :id="'checkbox'+index">
+                  <div class="cheack_circle">
+                    <div class="small_check_circle"></div>
+                  </div>
                 </div>
                 <span>{{item.title}}</span>
               </label>
-              <div class="delet_todo" @click="deleteTodo(index)">
-                <i class="fas fa-times"></i>
+              <div class="item_option">
+                <div class="edit_todo" @click="enableEditin(item)">
+                  <i class="fas fa-edit"></i>
+                </div>
+                <div class="delet_todo" @click="deleteTodo(index)">
+                  <i class="fas fa-times"></i>
+                </div>
               </div>
             </li>
           </ul>
+          <div class="todo_options">
+            <div class="row">
+              <div class="col-sm-12 col-md-6 col-lg-6">
+                <div class="option1">
+                  <button class="btn" @click="clearAll()">Clear All</button>
+                  <button class="btn" @click="clearCompleteTask()">Clear Completed</button>
+                </div>
+              </div>
+
+              <div class="col-sm-12 col-md-6 col-lg-6">
+                <div class="option1 option2 d-flex justify-content-end">
+                  <button class="btn" :class="visibility==='all' ? 'active':''" @click="allTasks()">All</button>
+                  <button class="btn" :class="visibility==='activetasks' ? 'active':''"
+                    @click="activaTasks()">Active</button>
+                  <button class="btn" :class="visibility==='completetasks' ? 'active':''"
+                    @click="completeTasks()">Complete</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -44,8 +74,11 @@
     data: {
       name: "omar",
       todoItem: "",
-      todoitems: [
-        {
+      todoObjectIndex: 0,
+      edit: false,
+      visibility: 'all',
+      allTodoitems: [],
+      todoitems: [{
           title: "item 1",
           complete: false
         },
@@ -56,15 +89,11 @@
       ]
     },
     computed: {
-      checkComplete: function(index){
-        console.log(index)
-        console.log(his.todoitems[index])
-        return this.todoitems[index].complete = true;
-      }
+
     },
     methods: {
-      addNewTodo: function() {
-        if(this.todoItem == ""){
+      addNewTodo: function () {
+        if (this.todoItem == "") {
           return;
         }
         this.todoitems.push({
@@ -73,11 +102,50 @@
         })
         this.todoItem = "";
       },
-      deleteTodo:function(index) {
+      deleteTodo: function (index) {
         const newarr = [...this.todoitems]
         newarr.splice(index, 1);
         this.todoitems = newarr;
+      },
+      enableEditin: function (item) {
+        this.todoItem = item.title
+        const index = this.todoitems.findIndex((item) => item.title === this.todoItem);
+        this.todoObjectIndex = index;
+        this.edit = true;
+      },
+      editTodo: function () {
+        const newarr = [...this.todoitems];
+        newarr[this.todoObjectIndex].title = this.todoItem;
+        this.todoitems = newarr;
+        this.todoItem = "";
+      },
+      checkComplete: function (item) {
+        item.complete = !item.complete;
+      },
+      clearAll: function () {
+        this.todoitems = "";
+        // console.log(this.todoitems)
+      },
+      clearCompleteTask: function () {
+        this.todoitems = this.allTodoitems.filter(function (item) {
+          return item.complete === false
+        });
+      },
+      allTasks: function () {
+        this.todoitems = [...allTodoitems];
+        this.visibility = "all"
+      },
+      activaTasks: function () {
+        this.todoitems = this.allTodoitems.filter((item) => item.complete === false);
+        this.visibility = "activetasks"
+      },
+      completeTasks: function () {
+        this.todoitems = this.allTodoitems.filter((item) => item.complete === true);
+        this.visibility = "completetasks"
       }
+    },
+    created() {
+      this.allTodoitems = [...this.todoitems];
     }
   })
 </script>

@@ -42,7 +42,7 @@ html{
         padding: 30px 15px;
         border-bottom: 1px solid #eee;
         &:last-child{
-          border-bottom: 0;
+          // border-bottom: 0;
         }
         span{
           font-size: 1.2rem;
@@ -89,22 +89,42 @@ html{
             text-decoration: line-through;
           }
         }
+        .item_option{
+          display: flex;
+          align-items: center;
+        }
         .delet_todo{
           font-size: 1.3rem;
           cursor: pointer;
-          opacity: 0;
+          opacity: 0.5;
           transition: all .3s ease-in-out;
+          margin-left: 10px;
           i{
             color: red;
           }
         }
+        .edit_todo{
+          cursor: pointer;
+        }
         &:hover{
           .delet_todo{
-            opacity: .5;
+            opacity: .9;
           }
         }
       }
   
+    }
+
+    .todo_options{
+      padding: 10px 15px;
+      .btn{
+        padding: 3px 10px;
+      }
+      .option2{
+        .active{
+          border: 1px solid #ddd;
+        }
+      }
     }
   }
 
