@@ -17,10 +17,10 @@
           </div>
           <ul class="list-unstyled mb-0">
             <li v-for="(item, index) in todoitems" :class="item.complete ? 'completed' : ''"
-              class="d-flex align-items-center justify-content-between">
+              class="d-flex align-items-center justify-content-between" >
               <label :for="'checkbox'+index">
                 <div @click="checkComplete(item)">
-                  <input type="checkbox" :id="'checkbox'+index">
+                  <input type="checkbox" :id="'checkbox'+index" v-model="item.complete">
                   <div class="cheack_circle">
                     <div class="small_check_circle"></div>
                   </div>
@@ -123,16 +123,15 @@
         item.complete = !item.complete;
       },
       clearAll: function () {
-        this.todoitems = "";
-        // console.log(this.todoitems)
+        this.todoitems = [];
+        this.allTodoitems = [];
       },
       clearCompleteTask: function () {
-        this.todoitems = this.allTodoitems.filter(function (item) {
-          return item.complete === false
-        });
+        this.allTodoitems = this.allTodoitems.filter((item) => item.complete === false);
+        this.todoitems = this.allTodoitems;
       },
       allTasks: function () {
-        this.todoitems = [...allTodoitems];
+        this.todoitems = this.allTodoitems;
         this.visibility = "all"
       },
       activaTasks: function () {
@@ -144,8 +143,19 @@
         this.visibility = "completetasks"
       }
     },
+    watch:{
+      todoitems:{
+        handler:function(todo){
+          sessionStorage.setItem("todoitems", JSON.stringify(this.todoitems));
+        },
+        deep: true
+      }
+    },
     created() {
-      this.allTodoitems = [...this.todoitems];
+      const todosItemsseesion = JSON.parse(sessionStorage.getItem('todoitems'))|| [];
+      console.log(todosItemsseesion)
+      this.todoitems = todosItemsseesion
+      this.allTodoitems = todosItemsseesion
     }
   })
 </script>
