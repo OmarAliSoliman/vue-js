@@ -227,6 +227,30 @@
     class="fas fa-star" v-for="item in 5-rate"></i>
 
   <hr>
+
+  <ul>
+    <user v-for="item in arrayforcomponent" :name="item.name" :age="item.age" :phone="item.phone"></user>
+  </ul>
+
+
+  <h5>pass object</h5>
+  <productcom :product-data="productobj"></productcom>
+
+
+  <h5>pass object from arr</h5>
+  <productcomarr v-for="item in arrayforcomponent" :product-data="item"></productcomarr>
+
+  <h5>component inside component</h5>
+  <productcom :product-data="productobj"></productcom>
+
+  <hr>
+
+  <hr>
+
+  <h5>button counter</h5>
+  <button-counter v-on:counterincrease="counterChangeapp" :change-times="changeTimes"> </button-counter>
+
+  <hr>
   <ul>
     <li v-for="(item, index) in list">
       <p v-if="item > 10">{{item}}</p>
@@ -240,6 +264,51 @@
 </div>
 
 <script>
+  Vue.config.devtools = true;
+
+  Vue.component('user', {
+    template: '<li> {{name}}: {{age}}: {{phone}} </li>',
+    props: {
+      'name': {
+        required: true,
+      },
+      'age': {
+        type: Number,
+        default: 0,
+      },
+      'phone': {}
+    }
+  })
+
+  Vue.component('productcom', {
+    template: '<div>#{{productData.id}} : {{productData.name}} </div>  <user :name="productData.userobj.name"></user>',
+    props: ['productData']
+  })
+
+
+  Vue.component('productcomarr', {
+    template: '<div>#{{productData.name}} : {{productData.age}}: {{productData.phone}}</div>',
+    props: ['productData']
+  })
+
+  Vue.component('button-counter', {
+    template: '<button @click="counterincrease"> {{counter}} -> change times {{changeTimes}} </button>',
+    props: ['changeTimes'],
+    data: function () {
+      return {
+        counter: 0
+      }
+    },
+    methods: {
+      counterincrease: function () {
+        // console.log(this.counter)
+        this.counter++;
+        this.$emit('counterincrease') //same name of function
+      }
+    }
+
+  })
+
   new Vue({
     'el': '#app',
     // add data
@@ -288,6 +357,33 @@
       listnames: ["ahmed", 'yasers', 'khaled', 'abdullah'],
       searchitem: "",
       rate: 3,
+      arrayforcomponent: [{
+          name: "omar",
+          age: 20,
+          phone: "01098586783"
+        },
+        {
+          name: "ali",
+          age: 50,
+          phone: "0502856684"
+        },
+        {
+          name: "soliman",
+          age: 60,
+          phone: "0109988557"
+        },
+      ],
+
+      productobj: {
+        id: 1,
+        name: "Product1",
+        userobj: {
+          name: "omar",
+          age: 20,
+        }
+      },
+      newCounter: 0,
+      changeTimes: 0,
     },
     computed: {
       full_name: function () {
@@ -412,12 +508,16 @@
         // this.listnames = newarr;
       },
       rateplus: function (item) {
-        console.log("plus",this.rate, ' ', item)
+        console.log("plus", this.rate, ' ', item)
         this.rate = item + this.rate;
       },
       rateminus: function (item) {
-        console.log("minus",this.rate, ' ', item)
+        console.log("minus", this.rate, ' ', item)
         this.rate = item
+      },
+      counterChangeapp: function () {
+        console.log("hi")
+        this.changeTimes ++;
       }
     }
 
