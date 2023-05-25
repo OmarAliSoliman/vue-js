@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+
+
+
+
+
+
+    <div id="app">
+
+      <form action="">
+
+
+        <h4>input text</h4>
+        <input type="text" v-model="inputtext">
+
+        <h4>textarea</h4>
+        <textarea name="" v-model="inputtext" ></textarea>
+
+
+        <h4>radio button</h4>
+        <input type="radio" id="choose1" v-model="inputRadioValu" ><label for="choose1">choose 1</label>
+        <input type="radio" id="choose2" v-model="inputRadioValu" ><label for="choose2">choose 2</label>
+  
+      </form>
+
+    </div>
+
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+  <script>
+
+    new Vue({
+      el: "#app",
+      data: {
+        inputtext: "omar",
+        
+      }
+    })
+
+  </script>
+
+</body>
+
+</html>
