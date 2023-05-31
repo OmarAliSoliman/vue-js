@@ -17,7 +17,7 @@
 
   <div id="app">
 
-    <form action="">
+    <form action="" @submit.prevent="sendForm">
 
 
       <h4>input text</h4>
@@ -71,6 +71,39 @@
       </select>
 
 
+      <h4>Form Modifiers (lazy, number, trim, compine)</h4>
+      <input type="text" v-model.lazy="lazeMod">
+      {{lazeMod}}
+
+      <br><br>
+      <input type="text" v-model.number="numberMod">
+      {{numberMod}} {{`type is ${typeof numberMod}`}}
+
+      <br><br>
+      <input type="text" v-model="trimmedInput">
+      {{trimMod}}
+
+
+      <br><br>
+      <input type="text" v-model.number.lazy="numberModLaze">
+      {{numberModLaze}} {{`type is ${typeof numberModLaze}`}}
+
+
+      <br><br>
+      <h5>Input (onchange, inputchange)</h5>
+      <input type="text" @input="InputChange" @change="changeInput"> <br>
+      {{`Onchange = > ${onChangeValue} `}} <br>
+      {{`inputChange = > ${inputChangeValue} `}} <br>
+
+      <br><br>
+      <select @change="SelectChange">
+        <option value="">one</option>
+        <option value="">tow</option>
+      </select>
+
+
+
+      <button  type="submit">Submit</button>
     </form>
 
   </div>
@@ -79,7 +112,7 @@
 
 
 
-  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 
   <script>
     new Vue({
@@ -110,6 +143,36 @@
           }
         ],
         selectInputDynamic: "",
+        lazeMod: "",
+        numberMod: "",
+        trimMod: "",
+        numberModLaze:"",
+        onChangeValue: "",
+        inputChangeValue: "",
+      },
+      computed: {
+        trimmedInput: {
+          get() {
+            return this.trimMod.trim();
+          },
+          set(value) {
+            this.trimMod = value;
+          }
+        }
+      },
+      methods: {
+        changeInput: function(e){
+          this.onChangeValue = e.target.value;
+        },
+        InputChange: function(e){
+          this.inputChangeValue = e.target.value;
+        },
+        SelectChange:function(){
+          console.log("select change")
+        },
+        sendForm:function(){
+          console.log("send form")
+        }
       }
     })
   </script>
