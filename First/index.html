@@ -243,12 +243,49 @@
   <h5>component inside component</h5>
   <productcom :product-data="productobj"></productcom>
 
+
   <hr>
 
   <hr>
 
   <h5>button counter</h5>
   <button-counter v-on:counterincrease="counterChangeapp" :change-times="changeTimes"> </button-counter>
+
+
+
+  <hr>
+
+  <h5>Event Native</h5>
+  <button-counter @click.native="nativemethod" v-on:counterincrease="counterChangeapp" :change-times="changeTimes">
+  </button-counter>
+
+
+
+  <hr>
+  <button-counter-event :countevent.sync="newcountevent"> click me </button-counter-event>
+  <span>{{newcountevent}}</span>
+
+
+  <button-counter-event v-on:updatecountevent="updatecounteventMethod" :countevent="newcountevent"> click me
+  </button-counter-event>
+  <span>{{newcountevent}}</span>
+
+  <slots-component>
+
+    <!-- <div slot="header">hh</div>
+
+    <div slot="main">1</div>
+
+    <div slot="footer">2</div> -->
+
+  </slots-component>
+
+
+  <!-- dynamic component -->
+  <h5>Dynamic Component</h5>
+
+  <div is="first-component"></div>
+  <component is="second-component"></component>
 
   <hr>
   <ul>
@@ -307,6 +344,40 @@
       }
     }
 
+  })
+
+
+
+  Vue.component('button-counter-event', {
+    template: '<button @click="clickedcounterevent"><slot></slot></button>',
+    props: ['countevent'],
+    methods: {
+      clickedcounterevent: function () {
+        // console.log(this.counter)
+        // this.$emit('update:countevent', this.countevent+1) 
+        this.$emit('updatecountevent', this.countevent += 1)
+      }
+    }
+  })
+
+
+  // component must have wrapper
+  Vue.component('slots-component', {
+    template: `<div>
+      <header> <slot name="header">header slot</slot> </header>
+      <main><slot name="main">main slot</slot></main>
+      <footer><slot name="footer">footer slot</slot</footer>
+      </div>`
+  })
+
+
+  Vue.component('first-component', {
+    template: '<div> First component </div>'
+  })
+
+
+  Vue.component('second-component', {
+    template: '<div> Second component </div>'
   })
 
   new Vue({
@@ -384,6 +455,7 @@
       },
       newCounter: 0,
       changeTimes: 0,
+      newcountevent: 0
     },
     computed: {
       full_name: function () {
@@ -517,7 +589,13 @@
       },
       counterChangeapp: function () {
         console.log("hi")
-        this.changeTimes ++;
+        this.changeTimes++;
+      },
+      nativemethod: function () {
+        alert("native")
+      },
+      updatecounteventMethod: function (newval) {
+        this.newcountevent = newval;
       }
     }
 

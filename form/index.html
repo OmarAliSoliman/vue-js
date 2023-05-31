@@ -15,25 +15,65 @@
 
 
 
-    <div id="app">
+  <div id="app">
 
-      <form action="">
-
-
-        <h4>input text</h4>
-        <input type="text" v-model="inputtext">
-
-        <h4>textarea</h4>
-        <textarea name="" v-model="inputtext" ></textarea>
+    <form action="">
 
 
-        <h4>radio button</h4>
-        <input type="radio" id="choose1" v-model="inputRadioValu" ><label for="choose1">choose 1</label>
-        <input type="radio" id="choose2" v-model="inputRadioValu" ><label for="choose2">choose 2</label>
-  
-      </form>
+      <h4>input text</h4>
+      <input type="text" v-model="inputtext">
 
-    </div>
+      <h4>textarea</h4>
+      <textarea name="" v-model="inputtext"></textarea>
+
+
+      <h4>radio button</h4>
+      <input type="radio" id="choose1" value="radio1" v-model="inputRadioValu"><label for="choose1">choose 1</label>
+      <input type="radio" id="choose2" value="radio2" v-model="inputRadioValu"><label for="choose2">choose 2</label>
+
+
+
+
+      <h4>Checkboxes</h4>
+      <input type="checkbox" id="choose3" value="" v-model="inputCheckboxValu"><label for="choose3">checkbox 1</label>
+
+
+
+      <h4>Checkboxes Array (must have value)</h4>
+      <input type="checkbox" id="choose5" value="checkbox5" v-model="inputCheckbox2Valu"><label for="choose5">checkbox
+        5</label>
+      <input type="checkbox" id="choose6" value="checkbox6" v-model="inputCheckbox2Valu"><label for="choose6">checkbox
+        6</label>
+      <input type="checkbox" id="choose7" value="checkbox7" v-model="inputCheckbox2Valu"><label for="choose7">checkbox
+        7</label>
+
+
+
+      <h4>Select</h4>
+      <select name="" id="" v-model="selectInput">
+        <option value="option-1">option-1</option>
+        <option value="option-2">option-2</option>
+        <option value="option-3">option-3</option>
+      </select>
+
+
+      <h4>Multi Select</h4>
+      <select name="" id="" v-model="selectInputMulti" multiple="multiple">
+        <option value="option-1">option-1</option>
+        <option value="option-2">option-2</option>
+        <option value="option-3">option-3</option>
+      </select>
+
+
+      <h4>Dynamic Select</h4>
+      <select name="" id="" v-model="selectInputDynamic">
+        <option v-for="option in dynamicSelect" :value="option.value">{{option.label}}</option>
+      </select>
+
+
+    </form>
+
+  </div>
 
 
 
@@ -42,15 +82,36 @@
   <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 
   <script>
-
     new Vue({
       el: "#app",
+      created() {
+        if (this.dynamicSelect.length > 0) {
+          this.selectInputDynamic = this.dynamicSelect[0].value;
+        }
+      },
       data: {
         inputtext: "omar",
-        
+        inputRadioValu: "",
+        inputCheckboxValu: "",
+        inputCheckbox2Valu: ["checkbox5", "checkbox6"],
+        selectInput: "option-3",
+        selectInputMulti: ["option-1", "option-2"],
+        dynamicSelect: [{
+            value: "option1",
+            label: "First"
+          },
+          {
+            value: "option2",
+            label: "Second"
+          },
+          {
+            value: "option3",
+            label: "Third"
+          }
+        ],
+        selectInputDynamic: "",
       }
     })
-
   </script>
 
 </body>
